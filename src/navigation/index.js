@@ -36,9 +36,10 @@ const Navigation = () => {
           .then((document) => {
             const userData = document.data();
             setLoading(false);
-            setUser(userData);
-            console.log(userData);
-            dispatch(userToggle(userData));
+            // setUser(userData);
+            if (!list.userState) {
+              dispatch(userToggle(userData));
+            }
           })
           .catch((error) => {
             setLoading(false);
@@ -48,10 +49,8 @@ const Navigation = () => {
       }
     });
   }, []);
-  //   const { user } = useSelector(({ authReducer }) => authReducer);
-  //   const { initializing } = useSelector(({ appReducer }) => appReducer);
 
-  //   if (initializing) return <Loading />;
+  if (loading) return <></>;
 
   return (
     <NavigationContainer>

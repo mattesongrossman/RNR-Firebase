@@ -33,7 +33,6 @@ export default function LoginScreen({ navigation }) {
               return;
             }
             const user = firestoreDocument.data();
-            dispatch(userToggle(user));
             navigation.navigate("Home", { user });
           })
           .catch((error) => {
@@ -51,9 +50,10 @@ export default function LoginScreen({ navigation }) {
         style={{ flex: 1, width: "100%" }}
         keyboardShouldPersistTaps="always"
       >
+        {/* "Icon made by Pixel perfect from www.flaticon.com" */}
         <Image
           style={styles.logo}
-          source={require("../../../assets/icon.png")}
+          source={require("../../../assets/notes.png")}
         />
         <TextInput
           style={styles.input}

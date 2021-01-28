@@ -39,8 +39,7 @@ export default function RegistrationScreen({ navigation }) {
           .doc(uid)
           .set(data)
           .then(() => {
-            dispatch(userToggle(data));
-            navigation.navigate("Home", { user: data });
+            navigation.navigate("Home", { data });
           })
           .catch((error) => {
             alert(error);
@@ -59,7 +58,7 @@ export default function RegistrationScreen({ navigation }) {
       >
         <Image
           style={styles.logo}
-          source={require("../../../assets/icon.png")}
+          source={require("../../../assets/notes.png")}
         />
         <TextInput
           style={styles.input}

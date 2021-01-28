@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
   },
   formContainer: {
     flexDirection: "row",
@@ -41,16 +40,29 @@ export default StyleSheet.create({
   },
   listContainer: {
     marginTop: 20,
+    margin: 3,
     padding: 20,
   },
-  entityContainer: {
+  noteContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 16,
     borderBottomColor: "#cccccc",
     borderBottomWidth: 1,
     paddingBottom: 16,
   },
-  entityText: {
-    fontSize: 20,
+  noteText: {
+    fontSize: 16,
     color: "#333333",
+  },
+  noteButton: {
+    height: 40,
+    borderRadius: 5,
+    backgroundColor: "#fc2803",
+    width: 70,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
