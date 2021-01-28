@@ -3,12 +3,17 @@ import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
+import { useSelector, useDispatch } from "react-redux";
+import { userToggle } from "../../actions/index";
 
 export default function RegistrationScreen({ navigation }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  let list = useSelector((state) => state);
+
+  const dispatch = useDispatch();
 
   const onFooterLinkPress = () => {
     navigation.navigate("Login");
@@ -34,6 +39,7 @@ export default function RegistrationScreen({ navigation }) {
           .doc(uid)
           .set(data)
           .then(() => {
+            dispatch(userToggle());
             navigation.navigate("Home", { user: data });
           })
           .catch((error) => {

@@ -3,10 +3,15 @@ import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
+import { useSelector, useDispatch } from "react-redux";
+import { userToggle } from "../../actions/index";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  let list = useSelector((state) => state);
+
+  const dispatch = useDispatch();
 
   const onFooterLinkPress = () => {
     navigation.navigate("Registration");
@@ -28,6 +33,7 @@ export default function LoginScreen({ navigation }) {
               return;
             }
             const user = firestoreDocument.data();
+            dispatch(userToggle());
             navigation.navigate("Home", { user });
           })
           .catch((error) => {
