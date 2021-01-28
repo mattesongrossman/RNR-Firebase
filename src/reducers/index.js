@@ -1,5 +1,6 @@
 const initialState = {
   userState: false,
+  userData: {},
 };
 
 function reducer(state = initialState, action) {
@@ -8,6 +9,11 @@ function reducer(state = initialState, action) {
       let toggle = !state.userState;
       return Object.assign({}, state, {
         userState: toggle,
+        userData: action.payload,
+      });
+    case "USER_DATA":
+      return Object.assign({}, state, {
+        userData: action.payload,
       });
     default:
       return state;

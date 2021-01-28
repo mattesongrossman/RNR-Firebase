@@ -33,7 +33,7 @@ export default function LoginScreen({ navigation }) {
               return;
             }
             const user = firestoreDocument.data();
-            dispatch(userToggle());
+            dispatch(userToggle(user));
             navigation.navigate("Home", { user });
           })
           .catch((error) => {

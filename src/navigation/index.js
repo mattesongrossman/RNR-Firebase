@@ -8,6 +8,7 @@ import { firebase } from "../firebase/config";
 import { createStackNavigator } from "@react-navigation/stack";
 import { decode, encode } from "base-64";
 import { userToggle } from "../actions/index";
+import { userData } from "../actions/index";
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -36,7 +37,8 @@ const Navigation = () => {
             const userData = document.data();
             setLoading(false);
             setUser(userData);
-            dispatch(userToggle());
+            console.log(userData);
+            dispatch(userToggle(userData));
           })
           .catch((error) => {
             setLoading(false);

@@ -39,7 +39,7 @@ export default function RegistrationScreen({ navigation }) {
           .doc(uid)
           .set(data)
           .then(() => {
-            dispatch(userToggle());
+            dispatch(userToggle(data));
             navigation.navigate("Home", { user: data });
           })
           .catch((error) => {
