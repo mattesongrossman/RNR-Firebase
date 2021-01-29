@@ -12,8 +12,10 @@ import {
 } from "react-native";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
+import { ListHeader } from "../../components/Header";
 import { useSelector, useDispatch } from "react-redux";
 import { userToggle } from "../../actions/index";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function HomeScreen(props) {
   const [noteText, setNoteText] = useState("");
@@ -64,36 +66,38 @@ export default function HomeScreen(props) {
     }
   };
 
+  const deletenote = (id) => {
+    noteRef
+      .doc(id)
+      .delete()
+      .then(function () {
+        console.log("Document successfully deleted!");
+      })
+      .catch(function (error) {
+        console.error("Error removing document: ", error);
+      });
+  };
+
   const rendernote = ({ item, index }) => {
     return (
       <View style={styles.noteContainer}>
         <Text style={styles.noteText}>
           {index + 1}. {" " + item.text}
         </Text>
-        <TouchableOpacity style={styles.noteButton} title="Delete">
-          <Text style={styles.buttonText}>Delete</Text>
-        </TouchableOpacity>
+        <MaterialIcons
+          name="delete"
+          size={32}
+          color="red"
+          onPress={() => {
+            deletenote(item.id);
+          }}
+        ></MaterialIcons>
       </View>
     );
   };
 
-  const signOut = () => {
-    dispatch(userToggle({}));
-    firebase
-      .auth()
-      .signOut()
-      .then(() => console.log("User signed out!"));
-  };
-
   return (
     <SafeAreaView style={styles.container}>
-      <Text>{list.userData.email}</Text>
-      <Button
-        title="Logout"
-        onPress={() => {
-          signOut();
-        }}
-      />
       <View style={styles.container}>
         <View style={styles.formContainer}>
           <TextInput
@@ -105,9 +109,14 @@ export default function HomeScreen(props) {
             underlineColorAndroid="transparent"
             autoCapitalize="none"
           />
-          <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
-            <Text style={styles.buttonText}>Add</Text>
-          </TouchableOpacity>
+          <MaterialIcons
+            name="add"
+            size={32}
+            color="green"
+            onPress={() => {
+              onAddButtonPress();
+            }}
+          ></MaterialIcons>
         </View>
         {entities && (
           <ScrollView style={styles.listContainer}>
