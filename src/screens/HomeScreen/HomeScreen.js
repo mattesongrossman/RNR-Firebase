@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
-  Keyboard,
-  Text,
-  Button,
   TextInput,
-  TouchableOpacity,
   View,
   SafeAreaView,
   ScrollView,
 } from "react-native";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
-import { ListHeader } from "../../components/Header";
+import DateTime from "../../components/DateTime";
 import { useSelector, useDispatch } from "react-redux";
-import { userToggle } from "../../actions/index";
 import { MaterialIcons } from "@expo/vector-icons";
+import { onAddButtonPress } from "../../functions/NoteFunctions";
 
 export default function HomeScreen(props) {
   const [noteText, setNoteText] = useState("");
   const [entities, setEntities] = useState([]);
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [time, setTime] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+
   let list = useSelector((state) => state);
   const dispatch = useDispatch();
 
@@ -46,54 +47,23 @@ export default function HomeScreen(props) {
       );
   }, []);
 
-  const onAddButtonPress = () => {
-    if (noteText && noteText.length > 0) {
-      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-      const data = {
-        text: noteText,
-        authorID: userID,
-        createdAt: timestamp,
-      };
-      noteRef
-        .add(data)
-        .then((_doc) => {
-          setNoteText("");
-          Keyboard.dismiss();
-        })
-        .catch((error) => {
-          alert(error);
-        });
-    }
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
   };
 
-  const deletenote = (id) => {
-    noteRef
-      .doc(id)
-      .delete()
-      .then(function () {
-        console.log("Document successfully deleted!");
-      })
-      .catch(function (error) {
-        console.error("Error removing document: ", error);
-      });
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
   };
 
-  const rendernote = ({ item, index }) => {
-    return (
-      <View style={styles.noteContainer}>
-        <Text style={styles.noteText}>
-          {index + 1}. {" " + item.text}
-        </Text>
-        <MaterialIcons
-          name="delete"
-          size={32}
-          color="red"
-          onPress={() => {
-            deletenote(item.id);
-          }}
-        ></MaterialIcons>
-      </View>
-    );
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    showMode("time");
   };
 
   return (
@@ -118,6 +88,7 @@ export default function HomeScreen(props) {
             }}
           ></MaterialIcons>
         </View>
+        <DateTime />
         {entities && (
           <ScrollView style={styles.listContainer}>
             <FlatList
@@ -132,102 +103,3 @@ export default function HomeScreen(props) {
     </SafeAreaView>
   );
 }
-
-// import React, { useEffect, useState } from "react";
-// import {
-//   FlatList,
-//   Keyboard,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   View,
-// } from "react-native";
-// import styles from "./styles";
-// import { firebase } from "../../firebase/config";
-
-// export default function HomeScreen(props) {
-//   const [entityText, setEntityText] = useState("");
-//   const [entities, setEntities] = useState([]);
-
-//   // const entityRef = firebase.firestore().collection("entities");
-//   // const userID = props.extraData.id;
-
-//   // useEffect(() => {
-//   //   entityRef
-//   //     .where("authorID", "==", userID)
-//   //     .orderBy("createdAt", "desc")
-//   //     .onSnapshot(
-//   //       (querySnapshot) => {
-//   //         const newEntities = [];
-//   //         querySnapshot.forEach((doc) => {
-//   //           const entity = doc.data();
-//   //           entity.id = doc.id;
-//   //           newEntities.push(entity);
-//   //         });
-//   //         setEntities(newEntities);
-//   //       },
-//   //       (error) => {
-//   //         console.log(error);
-//   //       }
-//   //     );
-//   // }, []);
-
-//   const onAddButtonPress = () => {
-//     if (entityText && entityText.length > 0) {
-//       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-//       const data = {
-//         text: entityText,
-//         authorID: userID,
-//         createdAt: timestamp,
-//       };
-//       entityRef
-//         .add(data)
-//         .then((_doc) => {
-//           setEntityText("");
-//           Keyboard.dismiss();
-//         })
-//         .catch((error) => {
-//           alert(error);
-//         });
-//     }
-//   };
-
-//   const renderEntity = ({ item, index }) => {
-//     return (
-//       <View style={styles.entityContainer}>
-//         <Text style={styles.entityText}>
-//           {index}. {item.text}
-//         </Text>
-//       </View>
-//     );
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.formContainer}>
-//         <TextInput
-//           style={styles.input}
-//           placeholder="Add new entity"
-//           placeholderTextColor="#aaaaaa"
-//           onChangeText={(text) => setEntityText(text)}
-//           value={entityText}
-//           underlineColorAndroid="transparent"
-//           autoCapitalize="none"
-//         />
-//         <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
-//           <Text style={styles.buttonText}>Add</Text>
-//         </TouchableOpacity>
-//       </View>
-//       {entities && (
-//         <View style={styles.listContainer}>
-//           <FlatList
-//             data={entities}
-//             renderItem={renderEntity}
-//             keyExtractor={(item) => item.id}
-//             removeClippedSubviews={true}
-//           />
-//         </View>
-//       )}
-//     </View>
-//   );
-// }

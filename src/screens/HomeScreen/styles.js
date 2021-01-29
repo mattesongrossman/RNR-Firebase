@@ -51,6 +51,12 @@ export default StyleSheet.create({
     marginTop: 16,
     borderBottomColor: "#cccccc",
     borderBottomWidth: 1,
+  },
+  udContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 16,
     paddingBottom: 16,
   },
   noteText: {
