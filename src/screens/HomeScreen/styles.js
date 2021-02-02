@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   formContainer: {
     flexDirection: "row",
@@ -45,6 +46,7 @@ export default StyleSheet.create({
   },
   noteContainer: {
     display: "flex",
+    height: 100,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -62,6 +64,7 @@ export default StyleSheet.create({
   noteText: {
     fontSize: 16,
     color: "#333333",
+    flexWrap: "wrap",
   },
   noteButton: {
     height: 40,

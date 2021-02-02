@@ -29,32 +29,3 @@ export const deletenote = (id) => {
       console.error("Error removing document: ", error);
     });
 };
-
-export const rendernote = ({ item, index }) => {
-  return (
-    <View style={styles.noteContainer}>
-      <Text style={styles.noteText}>
-        {index + 1}. {" " + item.text}
-      </Text>
-      <View style={styles.udContainer}>
-        <MaterialIcons
-          style={{ paddingRight: 16 }}
-          name="edit"
-          size={32}
-          color="orange"
-          onPress={() => {
-            console.log("edit");
-          }}
-        ></MaterialIcons>
-        <MaterialIcons
-          name="delete"
-          size={32}
-          color="red"
-          onPress={() => {
-            deletenote(item.id);
-          }}
-        ></MaterialIcons>
-      </View>
-    </View>
-  );
-};

@@ -4,29 +4,29 @@ import styles from "./styles";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function DateTime() {
-  //   const [date, setDate] = useState(new Date(1598051730000));
-  //   const [time, setTime] = useState(new Date());
-  //   const [mode, setMode] = useState("date");
-  //   const [show, setShow] = useState(false);
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [time, setTime] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
 
-  //   const onChange = (event, selectedDate) => {
-  //     const currentDate = selectedDate || date;
-  //     setShow(Platform.OS === "ios");
-  //     setDate(currentDate);
-  //   };
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+  };
 
-  //   const showMode = (currentMode) => {
-  //     setShow(true);
-  //     setMode(currentMode);
-  //   };
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
 
-  //   const showDatepicker = () => {
-  //     showMode("date");
-  //   };
+  const showDatepicker = () => {
+    showMode("date");
+  };
 
-  //   const showTimepicker = () => {
-  //     showMode("time");
-  //   };
+  const showTimepicker = () => {
+    showMode("time");
+  };
 
   return (
     <SafeAreaView style={styles.container}>

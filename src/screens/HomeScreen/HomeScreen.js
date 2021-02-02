@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
+  Keyboard,
+  Text,
+  Button,
   TextInput,
+  TouchableOpacity,
   View,
   SafeAreaView,
   ScrollView,
+  Modal,
 } from "react-native";
 import styles from "./styles";
 import { firebase } from "../../firebase/config";
-import DateTime from "../../components/DateTime";
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
-import { onAddButtonPress } from "../../functions/NoteFunctions";
 
 export default function HomeScreen(props) {
   const [noteText, setNoteText] = useState("");
+  const [noteEdit, setNoteEdit] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const [entities, setEntities] = useState([]);
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [time, setTime] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
-
   let list = useSelector((state) => state);
   const dispatch = useDispatch();
 
@@ -47,23 +47,72 @@ export default function HomeScreen(props) {
       );
   }, []);
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
+  const onAddButtonPress = () => {
+    if (noteText && noteText.length > 0) {
+      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      const data = {
+        text: noteText,
+        authorID: userID,
+        createdAt: timestamp,
+      };
+      noteRef
+        .add(data)
+        .then((_doc) => {
+          setNoteText("");
+          Keyboard.dismiss();
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    }
   };
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
+  const deletenote = (id) => {
+    noteRef
+      .doc(id)
+      .delete()
+      .then(function () {
+        console.log("Document successfully deleted!");
+      })
+      .catch(function (error) {
+        console.error("Error removing document: ", error);
+      });
   };
 
-  const showDatepicker = () => {
-    showMode("date");
+  const rendernote = ({ item, index }) => {
+    return (
+      <View style={styles.noteContainer}>
+        <ScrollView>
+          <Text style={styles.noteText}>
+            {index + 1}. {" " + item.text}
+          </Text>
+        </ScrollView>
+        <View style={styles.udContainer}>
+          {/* <MaterialIcons
+            style={{ paddingRight: 16 }}
+            name="edit"
+            size={32}
+            color="orange"
+            onPress={() => {
+              console.log("test");
+              setNoteEdit(!noteEdit);
+            }}
+          ></MaterialIcons> */}
+          <MaterialIcons
+            name="delete"
+            size={32}
+            color="red"
+            onPress={() => {
+              deletenote(item.id);
+            }}
+          ></MaterialIcons>
+        </View>
+      </View>
+    );
   };
 
-  const showTimepicker = () => {
-    showMode("time");
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
   };
 
   return (
@@ -88,10 +137,10 @@ export default function HomeScreen(props) {
             }}
           ></MaterialIcons>
         </View>
-        <DateTime />
         {entities && (
           <ScrollView style={styles.listContainer}>
             <FlatList
+              style={{ width: "100%", top: 15 }}
               data={entities}
               renderItem={rendernote}
               keyExtractor={(item) => item.id}
